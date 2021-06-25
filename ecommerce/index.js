@@ -13,6 +13,8 @@ app.set('view engine', 'pug');
 app.use('/products', products);
 app.use('/api/products', productsApi);
 
+app.use(express.json());
+
 const server = app.listen(3000, () => {
     console.log(`Listening http://localhost:${server.address().port}`)
 });
