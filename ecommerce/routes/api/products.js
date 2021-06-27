@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
 const ProductsService = require('../../services/products');
+const validation = require('../../utils/middlewares/validationHandler')
+
+const { 
+    productIdSchema, 
+    productTagSchema, 
+    createProductSchema, 
+    updateProductSchema
+} = require('../../utils/schemas/products');
 
 const productService = new ProductsService();
 
@@ -10,7 +17,6 @@ router.get('/', async (req, res, next) => {
     console.log('req', req.query);
 
     try {
-        // throw new Error('This is an error from the API')
         const products = await productService.getProducts({ tags });
 
         res.status(200).json({
@@ -38,9 +44,8 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validation(createProductSchema), async (req, res, next) => {
     const { body: product } = req;
-    console.log('req', req.body)
 
     try {
         const createdProduct = await productService.createProduct({ product });
@@ -54,21 +59,24 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/:id', async (req, res, next) => {
-    const { id } = req.params;
-    const { body: product} = req;
-    console.log('req', req.params, req.body)
+router.put('/:id', 
+    validation({ id: productIdSchema }, 'params'), 
+    validation(updateProductSchema), 
+    async (req, res, next) => {
+        const { id } = req.params;
+        const { body: product} = req;
+        console.log('req', req.params, req.body)
 
-    try {
-        const updatedProduct = await productService.updateProduct({ id, product });
+        try {
+            const updatedProduct = await productService.updateProduct({ id, product });
 
-        res.status(200).json({
-            data: updatedProduct,
-            message: 'product updated'
-        });
-    } catch(err) {
-        next(err);
-    }
+            res.status(200).json({
+                data: updatedProduct,
+                message: 'product updated'
+            });
+        } catch(err) {
+            next(err);
+        }
 });
 
 router.delete('/:id', async (req, res, next) => {
