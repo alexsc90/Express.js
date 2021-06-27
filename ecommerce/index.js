@@ -4,6 +4,7 @@ const boom = require('boom');
 
 const products = require('./routes/views/products');
 const productsApi = require('./routes/api/products');
+const authApi = require('./routes/api/auth');
 
 const {
     logErrors,
@@ -30,6 +31,7 @@ app.set('view engine', 'pug');
 // Routes
 app.use('/products', products);
 app.use('/api/products', productsApi);
+app.use('/api/auth', authApi);
 
 app.get('/', (req, res) => {
     res.redirect('/products');
