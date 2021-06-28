@@ -1,11 +1,12 @@
 const { MongoClient, ObjectId } = require('mongodb')
+const debug = require('debug')
 const  { config } = require('../config');
 
 const MONGO_URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`
 
 class MongoLib {
     constructor() {
-        this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true });
+        this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
         this.dbName = config.dbName;
     }
 
@@ -16,7 +17,7 @@ class MongoLib {
                     reject(err)
                 }
 
-                console.log('Connected succesfully to mongodb');
+                debug('Connected succesfully to mongodb');
                 resolve(this.client.db(this.dbName))
             })
         })

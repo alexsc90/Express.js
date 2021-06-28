@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const boom = require('boom');
+const debug = require('debug')('app:server');
 
 const products = require('./routes/views/products');
-const productsApi = require('./routes/api/products');
+const productsApiRouter = require('./routes/api/products');
 const authApi = require('./routes/api/auth');
 
 const {
@@ -30,7 +31,7 @@ app.set('view engine', 'pug');
 
 // Routes
 app.use('/products', products);
-app.use('/api/products', productsApi);
+productsApiRouter(app);
 app.use('/api/auth', authApi);
 
 app.get('/', (req, res) => {
@@ -58,5 +59,5 @@ app.use(errorHandler);
 
 // Server
 const server = app.listen(3000, () => {
-    console.log(`Listening http://localhost:${server.address().port}`)
+    debug(`Listening http://localhost:${server.address().port}`)
 });
