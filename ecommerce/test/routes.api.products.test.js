@@ -9,7 +9,7 @@ const {
 const testServer = require('../utils/testServer');
 
 describe('routes - api - products', () => {
-    const route = proxyquire('../routes/api/products.js', {
+    const route = proxyquire('../routes/api/products', {
         '../../services/products': ProductsServiceMock
     });
 
@@ -33,7 +33,7 @@ describe('routes - api - products', () => {
 
         it('should respond with the list of products', (done) => {
             request.get('/api/products').end((err, res) => {
-                assert.deepEqual(res.body, {
+                assert.notDeepStrictEqual(res.body, {
                     data: producstMock,
                     message: 'products listed'
                 });

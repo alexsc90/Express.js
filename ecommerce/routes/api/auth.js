@@ -27,6 +27,7 @@ api.post('/token', async(req, res, next) => {
 
                 return res.status(200).json({ access_token: token });
             });
+            
         } catch(error) {
             next(error);
         }

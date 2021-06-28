@@ -13,6 +13,9 @@ const {
 //JWT
 require('../../utils/auth/strategies/jwt');
 
+const cacheResponse = require('../../utils/cacheResponse');
+const { FIVE_MINUTES_IN_SECONDS, SIXTY_MINUTES_IN_SECONDS } = require('../../utils/time');
+
 function productsApi(app) {
     const router = express.Router();
     app.use('/api/products', router);
@@ -20,6 +23,7 @@ function productsApi(app) {
     const productService = new ProductsService();
 
     router.get('/', async (req, res, next) => {
+        cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
         const { tags } = req.query;
 
         try {
@@ -29,12 +33,14 @@ function productsApi(app) {
                 data: products,
                 message: 'products listed'
             });
+
         } catch(err){
             next(err);
         }
     });
 
     router.get('/:id', async (req, res, next) => {
+        cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
         const { id } = req.params;
 
         try {
@@ -44,6 +50,7 @@ function productsApi(app) {
                 data: product,
                 message: 'product retrieved'
             });
+
         } catch(err) {
             next(err);
         }
@@ -59,6 +66,7 @@ function productsApi(app) {
                 data: createdProduct,
                 message: 'product created'
             });
+
         } catch(err) {
             next(err);
         }
@@ -79,6 +87,7 @@ function productsApi(app) {
                     data: updatedProduct,
                     message: 'product updated'
                 });
+
             } catch(err) {
                 next(err);
             }
@@ -96,6 +105,7 @@ function productsApi(app) {
                 data: deletedProduct,
                 message: 'product deleted'
             });
+            
         } catch(err) {
             next(err)
         }

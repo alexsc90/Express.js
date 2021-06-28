@@ -1,7 +1,6 @@
 const boom = require('boom')
 const Sentry = require("@sentry/node");
 const debug = require('debug')('app:error');
-
 const { config } = require('../../config');
 const isRequestAjaxOrApi = require('../isRequestAjaxOrApi.js')
 
@@ -35,7 +34,7 @@ function clientErrorHandler(err, req, res, next) {
         output: { statusCode, payload } 
     } = err
 
-    if(isRequestAjaxOrApi(req) || res.headerSent) {
+    if(isRequestAjaxOrApi(req) || res.headersSent) {
         res.status(statusCode).json(withErrorStack(payload, err.stack));
     } else {
         next(err);

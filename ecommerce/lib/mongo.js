@@ -1,5 +1,5 @@
-const { MongoClient, ObjectId } = require('mongodb')
-const debug = require('debug')
+const { MongoClient, ObjectId } = require('mongodb');
+const debug = require('debug')('app:mongo');
 const  { config } = require('../config');
 
 const MONGO_URI = `mongodb+srv://${config.dbUser}:${config.dbPassword}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`

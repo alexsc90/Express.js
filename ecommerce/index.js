@@ -2,9 +2,9 @@ const express = require('express');
 const path = require('path');
 const boom = require('boom');
 const debug = require('debug')('app:server');
-
+const helmet = require('helmet');
 const products = require('./routes/views/products');
-const productsApiRouter = require('./routes/api/products');
+const productsApi = require('./routes/api/products');
 const authApi = require('./routes/api/auth');
 
 const {
@@ -20,6 +20,7 @@ const isRequestAjaxOrApi = require('./utils/isRequestAjaxOrApi')
 const app = express();
 
 // Middlewares
+app.use(helmet());
 app.use(express.json());
 
 // Static files
@@ -31,7 +32,7 @@ app.set('view engine', 'pug');
 
 // Routes
 app.use('/products', products);
-productsApiRouter(app);
+productsApi(app);
 app.use('/api/auth', authApi);
 
 app.get('/', (req, res) => {

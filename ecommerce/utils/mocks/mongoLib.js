@@ -23,4 +23,4 @@ module.exports = {
     getAllStub,
     createStub,
     MongoLibMock
-}
+};
